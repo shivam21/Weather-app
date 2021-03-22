@@ -68,9 +68,13 @@ fun WeatherParticles(weatherType: WeatherType) {
             WeatherType.SNOW -> 10f
             else -> 100f
         },
-        image = ImageBitmap.imageResource(id = R.drawable.rain),
+        image = listOf(
+            ImageBitmap.imageResource(id = R.drawable.sun),
+            ImageBitmap.imageResource(id = R.drawable.cloudy)
+        ),
         numParticles = when (weatherType) {
             WeatherType.THUNDER -> 1
+            WeatherType.SUNNY -> 1
             else -> 100
         }
     )
@@ -85,12 +89,7 @@ fun WeatherParticles(weatherType: WeatherType) {
         )
     )
     Canvas(
-        modifier = Modifier.fillMaxSize().background(
-            when (weatherType) {
-                WeatherType.HAZE -> Color.Black.copy(alpha = 0.6f)
-                else -> Color.Black.copy(alpha = 0.8f)
-            }
-        ),
+        modifier = Modifier.fillMaxSize().background(Color.Transparent),
         onDraw = {
             rotate(angleState) {
                 particleSystem.doDraw(this, weatherType)

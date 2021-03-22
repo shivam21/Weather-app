@@ -13,21 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.androiddevchallenge.models
+package com.example.androiddevchallenge.utils
 
+import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.enums.WeatherType
 
-data class CityItem(
-    val weather: String,
-    val temperature: Int,
-    val windSpeed: Int,
-    val cityName: String,
-    val lastUpdated: String,
-    val weekWeatherList: List<WeekWeatherItem>
-)
-
-data class WeekWeatherItem(
-    val weather: WeatherType,
-    val maxTemp: Int = 0,
-    val minTemp: Int = 0
-)
+fun getDrawableId(weather: WeatherType): Int {
+    return when (weather) {
+        WeatherType.THUNDER -> R.drawable.ic_lighting
+        WeatherType.RAIN -> R.drawable.ic_rain
+        WeatherType.SUNNY -> R.drawable.ic_baseline_wb_sunny_24
+        WeatherType.HAZE -> R.drawable.ic_fog
+        else -> R.drawable.ic_snowflake
+    }
+}

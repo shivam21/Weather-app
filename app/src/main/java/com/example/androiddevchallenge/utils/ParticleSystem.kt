@@ -29,7 +29,7 @@ class ParticleSystem(
     private val yPosRange: Float,
     private val minSpeed: Float,
     private val speedRange: Float,
-    private val image: ImageBitmap,
+    private val image: List<ImageBitmap>,
     numParticles: Int
 ) {
     private val particles = mutableListOf<Particle>()
@@ -58,17 +58,30 @@ class ParticleSystem(
     fun updatePhysics(altDelta: Float, weatherType: WeatherType) {
         particles.forEachIndexed { index, particle ->
             particle.updatePhysics(altDelta, weatherType = weatherType)
-
-            if (particle.xPos !in startXPos..endXPos || particle.yPos !in startYPos..endYPos) {
-                particles[index] = Particle(
-                    startXPos = startXPos,
-                    startYPos = startYPos,
-                    xPosRange = xPosRange,
-                    yPosRange = yPosRange,
-                    minSpeed = minSpeed,
-                    speedRange = speedRange,
-                    image = image
-                )
+            if (weatherType == WeatherType.SUNNY) {
+                if (particle.yPos !in startXPos..endXPos || particle.yPos !in startYPos..endYPos) {
+                    particles[index] = Particle(
+                        startXPos = startXPos,
+                        startYPos = startYPos,
+                        xPosRange = xPosRange,
+                        yPosRange = yPosRange,
+                        minSpeed = minSpeed,
+                        speedRange = speedRange,
+                        image = image
+                    )
+                }
+            } else {
+                if (particle.xPos !in startXPos..endXPos || particle.yPos !in startYPos..endYPos) {
+                    particles[index] = Particle(
+                        startXPos = startXPos,
+                        startYPos = startYPos,
+                        xPosRange = xPosRange,
+                        yPosRange = yPosRange,
+                        minSpeed = minSpeed,
+                        speedRange = speedRange,
+                        image = image
+                    )
+                }
             }
         }
     }

@@ -27,6 +27,7 @@ object CityRepository {
             22,
             100,
             "Alaska",
+            "Updated 2 min ago",
             listOf(
                 WeekWeatherItem(WeatherType.RAIN, 17, 32),
                 WeekWeatherItem(WeatherType.SUNNY, 19, 34),
@@ -38,46 +39,50 @@ object CityRepository {
         ),
         CityItem(
             WeatherType.SUNNY.type, 35, 10, "America",
+            "Updated 3 min ago",
             listOf(
-                WeekWeatherItem(WeatherType.SUNNY),
-                WeekWeatherItem(WeatherType.RAIN),
-                WeekWeatherItem(WeatherType.HAZE),
-                WeekWeatherItem(WeatherType.SNOW),
-                WeekWeatherItem(WeatherType.RAIN),
-                WeekWeatherItem(WeatherType.SUNNY)
+                WeekWeatherItem(WeatherType.SUNNY, 17, 32),
+                WeekWeatherItem(WeatherType.RAIN, 27, 34),
+                WeekWeatherItem(WeatherType.HAZE, 19, 33),
+                WeekWeatherItem(WeatherType.SNOW, 16, 30),
+                WeekWeatherItem(WeatherType.RAIN, 22, 29),
+                WeekWeatherItem(WeatherType.SUNNY, 24, 33)
             )
         ),
         CityItem(
             WeatherType.SNOW.type, -4, 254, "Greenland",
+            "Just Updated",
             listOf(
-                WeekWeatherItem(WeatherType.SNOW),
-                WeekWeatherItem(WeatherType.RAIN),
-                WeekWeatherItem(WeatherType.SNOW),
-                WeekWeatherItem(WeatherType.HAZE),
-                WeekWeatherItem(WeatherType.THUNDER),
-                WeekWeatherItem(WeatherType.SUNNY)
+                WeekWeatherItem(WeatherType.SNOW, 11, 32),
+                WeekWeatherItem(WeatherType.RAIN, 12, 30),
+                WeekWeatherItem(WeatherType.SNOW, 17, 29),
+                WeekWeatherItem(WeatherType.HAZE, 9, 31),
+                WeekWeatherItem(WeatherType.THUNDER, 16, 34),
+                WeekWeatherItem(WeatherType.SUNNY, 13, 33)
             )
         ),
         CityItem(
             WeatherType.THUNDER.type, 8, 287, "Africa",
+            "Updated 1 min ago",
             listOf(
-                WeekWeatherItem(WeatherType.THUNDER),
-                WeekWeatherItem(WeatherType.SUNNY),
-                WeekWeatherItem(WeatherType.SNOW),
-                WeekWeatherItem(WeatherType.HAZE),
-                WeekWeatherItem(WeatherType.THUNDER),
-                WeekWeatherItem(WeatherType.SUNNY)
+                WeekWeatherItem(WeatherType.THUNDER, 6, 12),
+                WeekWeatherItem(WeatherType.SUNNY, 7, 15),
+                WeekWeatherItem(WeatherType.SNOW, 2, 7),
+                WeekWeatherItem(WeatherType.HAZE, 5, 10),
+                WeekWeatherItem(WeatherType.THUNDER, 7, 15),
+                WeekWeatherItem(WeatherType.SUNNY, 9, 14)
             )
         ),
         CityItem(
             WeatherType.HAZE.type, 1, 325, "New Zealand",
+            "Updated 3 min ago",
             listOf(
-                WeekWeatherItem(WeatherType.HAZE),
-                WeekWeatherItem(WeatherType.SUNNY),
-                WeekWeatherItem(WeatherType.SNOW),
-                WeekWeatherItem(WeatherType.HAZE),
-                WeekWeatherItem(WeatherType.RAIN),
-                WeekWeatherItem(WeatherType.THUNDER)
+                WeekWeatherItem(WeatherType.HAZE, 12, 29),
+                WeekWeatherItem(WeatherType.SUNNY, 14, 26),
+                WeekWeatherItem(WeatherType.SNOW, 9, 28),
+                WeekWeatherItem(WeatherType.HAZE, 10, 31),
+                WeekWeatherItem(WeatherType.RAIN, 13, 27),
+                WeekWeatherItem(WeatherType.THUNDER, 11, 32)
             )
         )
     )

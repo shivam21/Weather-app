@@ -15,22 +15,20 @@
  */
 package com.example.androiddevchallenge.models
 
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.drawscope.translate
 import com.example.androiddevchallenge.enums.WeatherType
 
 const val SNOW_RADIUS = 7.5f
 const val RAIN_STRETCH = 15f
+const val SUN_RADIUS = 250
 
 data class Particle(
     private val startXPos: Float,
@@ -39,7 +37,7 @@ data class Particle(
     private val yPosRange: Float,
     private val minSpeed: Float,
     private val speedRange: Float,
-    private val image: ImageBitmap
+    private val image: List<ImageBitmap>
 ) {
     private var speed = minSpeed + Math.random().toFloat() * speedRange
     var xPos: Float = startXPos + Math.random().toFloat() * xPosRange
@@ -49,28 +47,34 @@ data class Particle(
         private set
 
     fun updatePhysics(change: Float, weatherType: WeatherType) {
-        if (weatherType == WeatherType.HAZE) {
-            val ran = Math.random()
-            when {
-                ran <= 0.2 -> {
-                    xPos += change * speed
-                    yPos += change * speed
-                }
-                ran <= 0.4 -> {
-                    xPos += change * speed
-                    yPos -= change * speed
-                }
-                ran <= 0.6 -> {
-                    xPos -= change * speed
-                    yPos -= change * speed
-                }
-                else -> {
-                    xPos -= change * speed
-                    yPos += change * speed
+        when (weatherType) {
+            WeatherType.HAZE -> {
+                val ran = Math.random()
+                when {
+                    ran <= 0.2 -> {
+                        xPos += change * speed
+                        yPos += change * speed
+                    }
+                    ran <= 0.4 -> {
+                        xPos += change * speed
+                        yPos -= change * speed
+                    }
+                    ran <= 0.6 -> {
+                        xPos -= change * speed
+                        yPos -= change * speed
+                    }
+                    else -> {
+                        xPos -= change * speed
+                        yPos += change * speed
+                    }
                 }
             }
-        } else {
-            yPos += 0.5f * change * speed
+            WeatherType.SUNNY -> {
+                yPos += 0.01f * change * speed
+            }
+            else -> {
+                yPos += 0.5f * change * speed
+            }
         }
     }
 
@@ -79,12 +83,12 @@ data class Particle(
     fun onDraw(canvas: DrawScope, weatherType: WeatherType) {
         when (weatherType) {
             WeatherType.RAIN -> {
-                val scaleFactor = 1f
+                val scaleFactor = 2f
                 val rainStretch = RAIN_STRETCH * (scaleFactor + 1.0f) / 2f
                 val x1 = xPos
-                val y1 = yPos - (rainStretch)
+                val y1 = yPos - 0.01f * speed * (rainStretch)
                 val x2 = xPos
-                val y2 = yPos + (rainStretch)
+                val y2 = yPos + 0.01f * speed * (rainStretch)
                 val brush = Brush.linearGradient(
                     listOf(
                         Color.Transparent,
@@ -97,7 +101,7 @@ data class Particle(
                 )
                 canvas.drawLine(
                     brush, start = Offset(x1, y1),
-                    end = Offset(x2, y2), strokeWidth = 0.6f
+                    end = Offset(x2, y2), strokeWidth = 1f
                 )
             }
             WeatherType.SNOW -> {
@@ -139,34 +143,24 @@ data class Particle(
                 list.forEach {
                     path.lineTo(it.x, it.y)
                 }
-                canvas.drawIntoCanvas {
-                    it.save()
-                    it.nativeCanvas.drawPath(
-                        path.asAndroidPath(),
-                        Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                            xfermode = PorterDuffXfermode(PorterDuff.Mode.LIGHTEN)
-                            // maskFilter = BlurMaskFilter(1f, BlurMaskFilter.Blur.INNER)
-                            setShadowLayer(
-                                30f,
-                                -1f,
-                                0f,
-                                android.graphics.Color.parseColor("#00FFFF")
-                            )
-                            style = Paint.Style.STROKE
-                            color = android.graphics.Color.parseColor("#00FFFF")
-                        }
-                    )
-                    it.restore()
-                }
 
-//                canvas.drawPath(
-//                    path,
-//                    Color.Cyan,
-//                    style = Stroke(),
-//                    blendMode = androidx.compose.ui.graphics.BlendMode.Lighten
-//                )
+                canvas.drawPath(
+                    path,
+                    Brush.linearGradient(listOf(Color.White, Color.Black)),
+                    style = Stroke(width = 10f),
+                    blendMode = androidx.compose.ui.graphics.BlendMode.Lighten
+                )
             }
             WeatherType.SUNNY -> {
+                canvas.rotate(yPos, pivot = Offset(canvas.center.x, canvas.center.y / 2)) {
+                    canvas.drawImage(image[0], Offset(canvas.center.x, canvas.center.y / 2))
+                }
+                canvas.translate(yPos, canvas.center.y / 4) {
+                    canvas.drawImage(image[1], Offset(canvas.center.x / 2, canvas.center.y / 8))
+                }
+                canvas.translate(yPos, canvas.center.y / 6) {
+                    canvas.drawImage(image[1], Offset(canvas.center.x / 2, canvas.center.y / 8))
+                }
             }
         }
     }
