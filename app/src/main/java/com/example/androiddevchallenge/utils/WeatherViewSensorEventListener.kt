@@ -75,8 +75,11 @@ class WeatherViewSensorEventListener(
             val pitch = Math.toDegrees(orientationAngles[1].toDouble())
             val roll = Math.toDegrees(orientationAngles[2].toDouble())
 
-            if ((-85.0..85.0).contains(pitch))
-                onAngleChanged(360 - roll.toFloat())
+            if ((-85.0..85.0).contains(pitch)) {
+                val angle = 360 - roll.toFloat()
+                if ((-30.0..30.0).contains(360 - angle))
+                    onAngleChanged(angle)
+            }
         }
     }
 

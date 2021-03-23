@@ -30,6 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.models.CityItem
@@ -69,6 +71,9 @@ fun HomeTopAppBar(cityItemState: CityItem?, navigateToSelectCity: () -> Unit) {
             Modifier.align(Alignment.CenterEnd)
                 .padding(end = 20.dp)
                 .size(20.dp)
+                .semantics(true) {
+                    contentDescription = "selectCityIcon"
+                }
                 .clickable { navigateToSelectCity() },
             tint = Color.White
         )

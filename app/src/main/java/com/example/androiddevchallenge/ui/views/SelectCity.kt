@@ -16,26 +16,36 @@
 package com.example.androiddevchallenge.ui.views
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.models.CityItem
 import com.example.androiddevchallenge.viewmodels.HomeViewModel
+import dev.chrisbanes.accompanist.insets.LocalWindowInsets
+import dev.chrisbanes.accompanist.insets.toPaddingValues
 
 @Composable
 fun SelectCity(navController: NavHostController, viewModel: HomeViewModel) {
@@ -43,15 +53,29 @@ fun SelectCity(navController: NavHostController, viewModel: HomeViewModel) {
     val cityList = viewModel.cityList
     Scaffold {
         Column {
-            TopAppBar(Modifier.padding(top = 28.dp), backgroundColor = Color.White) {
-                Box(Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(start = 20.dp)) {
-                        Text(
-                            text = "Select City",
-                            style = MaterialTheme.typography.h6,
-                            modifier = Modifier.padding(start = 10.dp)
-                        )
-                    }
+            TopAppBar(
+                Modifier.padding(
+                    top = LocalWindowInsets.current.systemBars.toPaddingValues()
+                        .calculateTopPadding()
+                ),
+                backgroundColor = Color.White,
+            ) {
+                Row {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(24.dp, 24.dp)
+                            .clickable {
+                                navController.navigateUp()
+                            },
+                        tint = colorResource(id = R.color.black)
+                    )
+                    Text(
+                        text = stringResource(R.string.select_city),
+                        style = MaterialTheme.typography.h6,
+                        modifier = Modifier.padding(start = 10.dp)
+                    )
                 }
             }
             LazyColumn {
@@ -69,7 +93,9 @@ fun SelectCity(navController: NavHostController, viewModel: HomeViewModel) {
 @Composable
 fun CityItem(cityItem: CityItem, onCityItemClicked: (cityItem: CityItem) -> Unit) {
     Card(
-        Modifier.height(150.dp).padding(10.dp).shadow(5.dp).clickable {
+        Modifier.height(150.dp).padding(10.dp).shadow(5.dp).semantics(true) {
+            contentDescription = "city:${cityItem.cityName}"
+        }.clickable {
             onCityItemClicked(cityItem)
         }
     ) {

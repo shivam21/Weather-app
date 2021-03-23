@@ -21,28 +21,32 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.androiddevchallenge.charts.LineChart
-import com.example.androiddevchallenge.charts.renderer.utils.LineChartData
 import com.example.androiddevchallenge.models.WeekWeatherItem
+import com.example.androiddevchallenge.utils.TwoLinesChart
 
 @Composable
 fun WeekWeatherChart(weekWeatherList: List<WeekWeatherItem>) {
     Column(Modifier.padding(top = 50.dp, bottom = 100.dp)) {
-        LineChart(
-            LineChartData(
-                weekWeatherList.map {
-                    LineChartData.Point(it.maxTemp.toFloat(), true)
-                }
-            ),
-            modifier = Modifier.height(50.dp)
-        )
-        LineChart(
-            LineChartData(
-                weekWeatherList.map {
-                    LineChartData.Point(it.minTemp.toFloat(), false)
-                }
-            ),
-            modifier = Modifier.height(50.dp)
+//        LineChart(
+//            LineChartData(
+//                weekWeatherList.map {
+//                    LineChartData.Point(it.maxTemp.toFloat(), true)
+//                }
+//            ),
+//            modifier = Modifier.height(50.dp)
+//        )
+//        LineChart(
+//            LineChartData(
+//                weekWeatherList.map {
+//                    LineChartData.Point(it.minTemp.toFloat(), false)
+//                }
+//            ),
+//            modifier = Modifier.height(50.dp)
+//        )
+        TwoLinesChart(
+            maxPaths = weekWeatherList.map { it.maxTemp },
+            minPaths = weekWeatherList.map { it.minTemp },
+            modifier = Modifier.height(200.dp)
         )
     }
 }

@@ -16,23 +16,31 @@
 package com.example.androiddevchallenge
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.androiddevchallenge.utils.TwoLinesChart
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class TwoLineChartTest {
+
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Test
-    fun sampleTest() {
-        // Add instrumented tests here
+    fun checkContentDescription() {
+        composeTestRule.setContent {
+            TwoLinesChart(
+                maxPaths = listOf(8, 14),
+                minPaths = listOf(4, 6)
+            )
+        }
+        val contentDescription =
+            "Temperatures are max 8 and min 4, max 14 and min 6"
+        composeTestRule
+            .onNodeWithContentDescription(contentDescription)
+            .assertExists()
     }
 }

@@ -28,6 +28,6 @@ data class CityItem(
 
 data class WeekWeatherItem(
     val weather: WeatherType,
-    val maxTemp: Int = 0,
-    val minTemp: Int = 0
+    val minTemp: Int = 0,
+    val maxTemp: Int = 0
 )

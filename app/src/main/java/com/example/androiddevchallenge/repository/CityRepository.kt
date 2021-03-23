@@ -29,24 +29,24 @@ object CityRepository {
             "Alaska",
             "Updated 2 min ago",
             listOf(
-                WeekWeatherItem(WeatherType.RAIN, 17, 32),
-                WeekWeatherItem(WeatherType.SUNNY, 19, 34),
-                WeekWeatherItem(WeatherType.SNOW, 13, 43),
-                WeekWeatherItem(WeatherType.HAZE, 18, 30),
-                WeekWeatherItem(WeatherType.RAIN, 20, 35),
-                WeekWeatherItem(WeatherType.SUNNY, 14, 27)
+                WeekWeatherItem(WeatherType.RAIN, 4, 10),
+                WeekWeatherItem(WeatherType.SUNNY, 3, 12),
+                WeekWeatherItem(WeatherType.SNOW, 2, 11),
+                WeekWeatherItem(WeatherType.HAZE, 4, 14),
+                WeekWeatherItem(WeatherType.RAIN, 5, 13),
+                WeekWeatherItem(WeatherType.SUNNY, 3, 12)
             )
         ),
         CityItem(
             WeatherType.SUNNY.type, 35, 10, "America",
             "Updated 3 min ago",
             listOf(
-                WeekWeatherItem(WeatherType.SUNNY, 17, 32),
-                WeekWeatherItem(WeatherType.RAIN, 27, 34),
-                WeekWeatherItem(WeatherType.HAZE, 19, 33),
-                WeekWeatherItem(WeatherType.SNOW, 16, 30),
-                WeekWeatherItem(WeatherType.RAIN, 22, 29),
-                WeekWeatherItem(WeatherType.SUNNY, 24, 33)
+                WeekWeatherItem(WeatherType.SUNNY, 2, 12),
+                WeekWeatherItem(WeatherType.RAIN, 4, 14),
+                WeekWeatherItem(WeatherType.HAZE, 3, 11),
+                WeekWeatherItem(WeatherType.SNOW, 5, 10),
+                WeekWeatherItem(WeatherType.RAIN, 6, 13),
+                WeekWeatherItem(WeatherType.SUNNY, 3, 14)
             )
         ),
         CityItem(

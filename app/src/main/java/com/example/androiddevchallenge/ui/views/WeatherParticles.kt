@@ -35,6 +35,8 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.enums.WeatherType
 import com.example.androiddevchallenge.utils.ParticleSystem
@@ -43,10 +45,12 @@ import com.example.androiddevchallenge.utils.WeatherViewSensorEventListener
 @Composable
 fun WeatherParticles(weatherType: WeatherType) {
     var angleState by mutableStateOf(0f)
-    WeatherViewSensorEventListener(LocalContext.current, LocalLifecycleOwner.current) {
-        angleState = it
-    }.apply {
-        addObserver()
+    if (weatherType != WeatherType.SUNNY) {
+        WeatherViewSensorEventListener(LocalContext.current, LocalLifecycleOwner.current) {
+            angleState = it
+        }.apply {
+            addObserver()
+        }
     }
     val displayMetrics = Resources.getSystem().displayMetrics
     val screenHeight = displayMetrics.heightPixels
@@ -73,7 +77,7 @@ fun WeatherParticles(weatherType: WeatherType) {
             ImageBitmap.imageResource(id = R.drawable.cloudy)
         ),
         numParticles = when (weatherType) {
-            WeatherType.THUNDER -> 1
+            WeatherType.THUNDER -> 2
             WeatherType.SUNNY -> 1
             else -> 100
         }
@@ -89,7 +93,9 @@ fun WeatherParticles(weatherType: WeatherType) {
         )
     )
     Canvas(
-        modifier = Modifier.fillMaxSize().background(Color.Transparent),
+        modifier = Modifier.fillMaxSize().background(Color.Transparent).semantics(true) {
+            contentDescription = "weather type:${weatherType.type}"
+        },
         onDraw = {
             rotate(angleState) {
                 particleSystem.doDraw(this, weatherType)

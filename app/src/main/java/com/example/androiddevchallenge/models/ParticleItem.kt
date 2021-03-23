@@ -15,20 +15,26 @@
  */
 package com.example.androiddevchallenge.models
 
+import android.graphics.BlurMaskFilter
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.LinearGradientShader
+import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.nativeCanvas
 import com.example.androiddevchallenge.enums.WeatherType
 
-const val SNOW_RADIUS = 7.5f
+const val SNOW_RADIUS = 10f
+const val HAZE_RADIUS = 7.5f
 const val RAIN_STRETCH = 15f
-const val SUN_RADIUS = 250
 
 data class Particle(
     private val startXPos: Float,
@@ -122,19 +128,32 @@ data class Particle(
                 val scaleFactor = 1
                 val brush = Brush.radialGradient(
                     colors = listOf(
-                        Color.Yellow,
-                        Color.Yellow,
-                        Color.Transparent,
+                        Color.White.copy(0.8f),
                         Color.Transparent
                     ),
-                    center = Offset(xPos, yPos),
-                    radius = (SNOW_RADIUS * scaleFactor),
+                    center = Offset(0.1f * speed * xPos, 0.1f * speed * yPos),
+                    radius = (HAZE_RADIUS * scaleFactor),
                 )
                 canvas.drawCircle(
                     brush = brush,
-                    radius = (SNOW_RADIUS * scaleFactor),
-                    center = Offset(xPos, yPos)
+                    radius = (HAZE_RADIUS * scaleFactor),
+                    center = Offset(0.1f * speed * xPos, 0.1f * speed * yPos)
                 )
+                canvas.drawIntoCanvas {
+                    it.nativeCanvas.drawCircle(
+                        0.1f * speed * xPos,
+                        0.1f * speed * yPos,
+                        (SNOW_RADIUS * scaleFactor),
+                        Paint().asFrameworkPaint().apply {
+                            isAntiAlias = true
+                            isDither = true
+                            style = android.graphics.Paint.Style.STROKE
+                            color = android.graphics.Color.YELLOW
+                            strokeWidth = 2f
+                            maskFilter = BlurMaskFilter(2 * HAZE_RADIUS, BlurMaskFilter.Blur.NORMAL)
+                        }
+                    )
+                }
             }
             WeatherType.THUNDER -> {
                 val list = createLightning(canvas)
@@ -143,13 +162,31 @@ data class Particle(
                 list.forEach {
                     path.lineTo(it.x, it.y)
                 }
-
                 canvas.drawPath(
                     path,
-                    Brush.linearGradient(listOf(Color.White, Color.Black)),
-                    style = Stroke(width = 10f),
-                    blendMode = androidx.compose.ui.graphics.BlendMode.Lighten
+                    brush = Brush.linearGradient(listOf(Color.White.copy(0.8f), Color.Transparent)),
+                    style = Stroke(width = 6f)
                 )
+                canvas.drawIntoCanvas {
+                    it.nativeCanvas.drawPath(
+                        path.asAndroidPath(),
+                        Paint().asFrameworkPaint().apply {
+                            isAntiAlias = true
+                            isDither = true
+                            style = android.graphics.Paint.Style.STROKE
+                            // color = android.graphics.Color.argb(235, 163, 245, 245)
+                            shader = LinearGradientShader(
+                                Offset(0f, 0f), Offset(0f, canvas.size.height * 0.8f),
+                                listOf(
+                                    Color(163, 245, 245),
+                                    Color.Transparent
+                                )
+                            )
+                            strokeWidth = 8f
+                            maskFilter = BlurMaskFilter(15f, BlurMaskFilter.Blur.NORMAL)
+                        }
+                    )
+                }
             }
             WeatherType.SUNNY -> {
                 canvas.rotate(yPos, pivot = Offset(canvas.center.x, canvas.center.y / 2)) {
@@ -172,7 +209,7 @@ fun createLightning(drawScope: DrawScope): MutableList<LightItem> {
     val roughness = 2
     val size = drawScope.size.width
     val center = LightItem(size / 2, 20f)
-    val groundHeight = drawScope.size.height - 20
+    val groundHeight = 0.7 * drawScope.size.height
     val maxDifference = size / 5f // "size" is the width and height of the canvas.
     val minSegmentHeight = 5
     // The main segment's height
